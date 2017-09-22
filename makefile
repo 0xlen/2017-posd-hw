@@ -1,4 +1,4 @@
-NAME = HW1
+NAME = hw1
 INC_DIR = include
 
 all: ${NAME}
