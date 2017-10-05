@@ -1,27 +1,27 @@
-NAME = hw1
+NAME = hw2
 INC_DIR = include
 
 all: ${NAME}
 
-${NAME}: main.o Sort.o Shapes.o Media.o
+${NAME}: number.o variable.o atom.o term.o
+
 ifeq (${OS}, Windows_NT)
-	g++ -o ${NAME} main.o Shapes.o Media.o Sort.o -lgtest
+	g++ -o ${NAME} number.o variable.o atom.o term.o -lgtest
 else
-	g++ -o ${NAME} main.o Shapes.o Media.o Sort.o -lgtest -lpthread
+	g++ -o ${NAME} number.o variable.o atom.o term.o -lgtest -lpthread
 endif
 
+number.o: $(INC_DIR)/number.h number.cpp
+	g++ -std=gnu++0x -c number.cpp
 
-main.o: main.cpp utSort.h
-	g++ -std=gnu++0x -c main.cpp
+atom.o: $(INC_DIR)/atom.h atom.cpp
+	g++ -std=gnu++0x -c atom.cpp
 
-Sort.o: $(INC_DIR)/Sort.h Sort.cpp
-	g++ -std=gnu++0x -c Sort.cpp
+term.o: $(INC_DIR)/utTerm.h mainTerm.cpp
+	g++ -std=gnu++0x -c mainTerm.cpp
 
-Shapes.o: $(INC_DIR)/Shapes.h Shapes.cpp
-	g++ -std=gnu++0x -c Shapes.cpp
-
-Media.o: $(INC_DIR)/Media.h Media.cpp
-	g++ -std=gnu++0x -c Media.cpp
+variable.o: $(INC_DIR)/variable.h variable.cpp
+	g++ -std=gnu++0x -c variable.cpp
 
 
 clean:
