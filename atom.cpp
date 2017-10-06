@@ -1,18 +1,15 @@
-#include "atom.h"
-#include "variable.h"
-#include "number.h"
+#include "include/atom.h"
+#include "include/variable.h"
+#include "include/number.h"
 
-bool Atom::match(Number number) {
-    // Match
+bool Atom::match(Atom &atom){
+    return false;
 }
 
-bool Atom::match(Atom atom){
-    // Match
-}
-bool Atom::match(Variable &v){
-    // Match
+bool Atom::match(Number &number){
+    return false;
 }
 
-bool Atom::operator==(Atom atom) {
-    // Equal operator
+bool Atom::match(Variable &variable){
+    return variable.match(*this);
 }

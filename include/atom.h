@@ -2,15 +2,19 @@
 #define ATOM_H
 
 #include <string>
-#include <number.h>
-#include <variable.h>
 
 using std::string;
+
+class Number;
+class Variable;
 
 class Atom {
 
     public:
-        Atom (string str): _symbol(str) {}
+        Atom (string str) {
+            _symbol = str;
+            _value = str;
+        }
 
         string value() {
             return _value;
@@ -20,13 +24,9 @@ class Atom {
             return _symbol;
         }
 
-        bool match(Atom atom);
-        bool match(Number number);
+        bool match(Atom &atom);
+        bool match(Number &number);
         bool match(Variable &variable);
-
-        bool operator==(Atom atom) {
-            return _symbol == atom._symbol;
-        }
 
     private:
         string _symbol;
