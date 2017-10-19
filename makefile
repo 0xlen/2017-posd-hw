@@ -1,28 +1,19 @@
-NAME = hw2
+NAME = hw3
 INC_DIR = include
+HEADERS = include/atom.h include/variable.h include/number.h include/term.h include/utVariable.h include/utStruct.h include/struct.h
 
 all: ${NAME}
 
-${NAME}: mainTerm.o atom.o number.o variable.o
+${NAME}: main.o
 
 ifeq (${OS}, Windows_NT)
-	g++ -o ${NAME} mainTerm.o atom.o number.o variable.o -lgtest
+	g++ -o ${NAME} main.o -lgtest
 else
-	g++ -o ${NAME} mainTerm.o atom.o number.o variable.o -lgtest -lpthread
+	g++ -o ${NAME} main.o -lgtest -lpthread
 endif
 
-number.o: $(INC_DIR)/number.h number.cpp
-	g++ -std=gnu++0x -c number.cpp
-
-atom.o: $(INC_DIR)/atom.h atom.cpp
-	g++ -std=gnu++0x -c atom.cpp
-
-mainTerm.o: $(INC_DIR)/utTerm.h mainTerm.cpp
-	g++ -std=gnu++0x -c mainTerm.cpp
-
-variable.o: $(INC_DIR)/variable.h variable.cpp
-	g++ -std=gnu++0x -c variable.cpp
-
+main.o: main.cpp $(HEADERS)
+	g++ -std=gnu++0x -c main.cpp
 
 clean:
 ifeq (${OS}, Windows_NT)

@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
-#include "include/utTerm.h"
+#include "include/utStruct.h"
+#include "include/utVariable.h"
 
 int main( int argc , char **argv )
 {

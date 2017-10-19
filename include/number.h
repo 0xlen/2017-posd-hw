@@ -2,33 +2,35 @@
 #define NUMBER_H
 
 #include "variable.h"
-#include "atom.h"
+#include "term.h"
 #include <string>
-
-class Atom;
-class Variable;
+#include <sstream>
 
 using std::string;
 
-class Number {
+class Number : public Term {
     public:
-        Number (int number) {
-            _value = std::to_string(number);
+        Number (double number) {
+            std::stringstream val;
+            val << number;
+
+            _symbol = val.str();
         }
 
-        string symbol() {
+        string symbol() const {
             return _symbol;
         }
 
-        string value();
+        bool match(Term &term) {
+            return value() == term.value();
+        }
 
-        bool match(Atom &atom);
-        bool match(Number &number);
-        bool match(Variable &variable);
+        bool match(Variable &variable) {
+            return variable.match(*this);
+        }
 
     private:
         string _symbol;
-        string _value;
 };
 
 #endif

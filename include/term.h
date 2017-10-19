@@ -8,9 +8,15 @@ using std::string;
 class Term {
 
     public:
-        virtual string symbol();
-        virtual string value();
-        bool match();
+        virtual string symbol() const = 0;
+
+        virtual string value() const {
+            return symbol();
+        }
+
+        bool match(Term &term) {
+            return symbol() == term.symbol();
+        }
 };
 
 #endif
