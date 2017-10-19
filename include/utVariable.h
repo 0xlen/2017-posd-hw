@@ -106,6 +106,7 @@ TEST (Variable, num1_to_varZ_to_varY_to_varX) {
 TEST (Variable, num1_to_varZ_to_varX_and_varY_to_varX) {
     Number number(1);
     Variable X("X"), Y("Y"), Z("Z");
+
     X.match(Y);
     X.match(Z);
     Z.match(number);
@@ -130,7 +131,7 @@ TEST (Variable, Struct1) {
     Y.match(s);
 
     ASSERT_EQ("Y", Y.symbol());
-    ASSERT_EQ("s(X)", Y.symbol());
+    ASSERT_EQ("s(X)", Y.value());
 
 }
 

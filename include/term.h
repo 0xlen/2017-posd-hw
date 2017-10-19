@@ -14,7 +14,7 @@ class Term {
             return symbol();
         }
 
-        bool match(Term &term) {
+        virtual bool match(Term &term) {
             return symbol() == term.symbol();
         }
 };

@@ -6,7 +6,7 @@
 
 using std::string;
 
-class Variable : public Term{
+class Variable : public Term {
     public:
         Variable(string s): _symbol(s) {}
 
