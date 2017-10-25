@@ -1,23 +1,22 @@
 NAME = hw3
 INC_DIR = include
-HEADERS = include/atom.h include/variable.h include/number.h include/term.h include/utVariable.h include/utStruct.h include/struct.h
+objects := $(patsubst %.cpp,%.o,$(wildcard *.cpp))
+VPATH = include/
 
-all: ${NAME}
-
-${NAME}: main.o
-
-ifeq (${OS}, Windows_NT)
-	g++ -o ${NAME} main.o -lgtest
+all: $(objects)
+ifeq ($(OS), Windows_NT)
+	g++ -std=c++11 -o $(NAME) $^ -lgtest
 else
-	g++ -o ${NAME} main.o -lgtest -lpthread
+	g++ -std=c++11 -o $(NAME) $^ -lgtest -lpthread
 endif
 
-main.o: main.cpp $(HEADERS)
-	g++ -std=gnu++0x -c main.cpp
+%.o: %.cpp
+	g++ -std=c++11 -c $<
 
 clean:
 ifeq (${OS}, Windows_NT)
 	del *.o *.exe
+	del $(NAME)
 else
-	rm -f *.o exp
+	rm -f *.o exp $(NAME)
 endif
