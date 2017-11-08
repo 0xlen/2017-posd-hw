@@ -1,9 +1,9 @@
-NAME = hw4
+NAME = hw5
 INC_DIR = include
 objects := $(patsubst %.cpp,%.o,$(wildcard *.cpp))
 VPATH = include/
 
-all: $(objects)
+all: main.o
 ifeq ($(OS), Windows_NT)
 	g++ -std=gnu++0x -o $(NAME) $^ -lgtest
 else

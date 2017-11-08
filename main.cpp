@@ -2,6 +2,7 @@
 #include "include/utStruct.h"
 #include "include/utVariable.h"
 #include "include/utList.h"
+#include "include/utParser.h"
 
 int main( int argc , char **argv )
 {
