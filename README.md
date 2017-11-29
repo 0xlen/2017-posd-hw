@@ -1,82 +1,50 @@
-# POSD2017F Homework
+### Pattern Oriented Software Design
+#### Fall, 2017
+#### Prof Y C Cheng
+#### Dept of Computer Science and Information Engineering
+#### Taipei Tech
 
-## Homework assignment 2
+### Introduction
+We will build a Prolog term matching program in this course. Functionally, the program is simple but non-trivial. Thus, we will have plenty of opportunities to encounter **design problems**. After analyzing the design problems, we will make use of appropriate design patterns to solve them. The patterns include _Composite_, _Interpreter_, _Builder_, _Iterator_, _Proxy_, _Visitor_, and so on. Along the way we will also pick up some useful domain knowledge of computing: symbolic matching, lexical analysis, and parsing.
 
-Please use [the files that were used in course](https://github.com/yccheng66/posd2017f) and copy test header to your repository from this project. 
+Thus the course requires you to get familiar with matching, the fundamental operation of executing a Prolog program. Due to time limitation, we will focus only on defining terms and performing matches. We build our simplified term matching program after [SWI Prolog](http://www.swi-prolog.org/).
 
-For this time, not only run the test you write, but the test we prepared for your program.
-So you will see two jobs, make sure 2 jobs will be passed before deadline. Then, everyone's CI job had updated, it should pull the repository automatically once you push your commit. If it does not work, email to us.
+I will be using the following simple way to write C++ programs. My programs (and your programs will, too) come with a makefile that builds it by typing _make_ in bash. We will use the g++ stack. While you are free to code on any OS platform (e.g., Ubuntu, MacOS, and bash on Ubuntu on Windows), your program assignment will be graded on Ubuntu.
 
-### Update
- * Tue Oct 03 2017 17:12:30
- 
-   Because some classmates are not sure about the result of building, we add the sign to help you understand, for example:![Imgur](https://i.imgur.com/rszFNxO.png) is test fail, ![Imgur](https://i.imgur.com/IK5hq0j.png) is build fail.
- * Tue Oct 03 2017 09:46:22
+When coding in class, I will use the editor [Atom](https://atom.io), which comes with syntax highlighting, code completion to make coding easy. I will also use the plugin [PlatformIO IDE Terminal](https://atom.io/packages/platformio-ide-terminal) so that we can access a terminal to build programs without leaving Atom.
 
-   * About `Number`,  its constructor should take an argument with int type, as the test prompt in utTerm.h that we give you.
-    Some people may think that it could take a double number or string value, but in this time we just consider some simple situation. 
-    Maybe in the following course you will modity some define in a perfect way.
-    
-   * For all header files, **the first letter of file name, please use lowercase.** In the early day, we ask you use uppercase, 
-    but it's wrong and it is our mistake, we just didn't have enough communication on it. So if you are using uppercase on each header, 
-    please change to lowercase.
-    
-   * For each class, **the first letter of class name, please use uppercase.** And note that the Variable class in utTerm.h, we wrote
-   `Var`, but it is also wrong. Please follow the way in course using `Variable`.
-   
-   Sorry for this time there are so many places need to be modify, we will improve that at the next homework. After this update, if your 
-   jobs already pass, please rebuild it and check it still pass or not.
+### Prolog basics - goal, relational goals, Conjunction of goals, disjunction of goals,
 
- * Mon Oct 02 2017 14:07:39
- 
-    Some people met the error like this:
-    ![Imgur](https://i.imgur.com/ft0F8ZC.png)
-    
-    It's because the building environment on CI serve is on windows paltform. So you need to write additional instructions against 
-    windows. You can refer [this homework](https://github.com/e8315402/myProject/blob/master/makefile) using in homework 1, and make 
-    sure that each instruction has same arguments.
-    
-```diff
-foo.o: foo.h foo.cpp
- g++ --std=c++11 foo.h foo.cpp
+A _query_ consists of one or more _goal_:
 
-bar.o: bar.h bar.cpp
-+ ✓ g++ --std=c++11 bar.h bar.cpp
-- ✗ g++ bar.h bar.cpp
+```prolog
+?- X=1.
+X = 1.
 ```
-    
- 
- * Sat Sep 30 2017 15:53:58
- 
-    If your CI job fails, you can click state icon to get the further information.
-    ![consoleLog](https://i.imgur.com/wgXB8ap.png)
 
-#### Assignment requirement 
- 1. Need to create a header file by youself naming `Number.h`.
-   In this header, there will be three method you should define: `symbol()`, `value()` and `match()`. As you define the Atom 
-   and implement it, the `symbol` and `value` method should return value with string type. And for `match`, in this homework, 
-   please use the method way to define instead of operator.
-    
- 2. Also re-define and re-implement the `match()` in Atom via method way instead of operator.
- 
- 3. Implement all tests in utTerm.h. There are prompts in each test, follow the prompt to complete tests.
- 
- 4. Write the corresponding makefile to generate executable file which named `hw2`.
- 
- 5. Make sure your CI jobs are both passed before deadline.
+is a query "is X matchable to 1?" consisting of the relational goal "X=1". The goal "X=1" _succeeded_ (or is _satisfiable_) because variable X matches any legitimate term.
 
-#### Marks
+```prolog
+?- X=1, Y=X.
+X = Y, Y = 1.
+```
 
-On your own tests, each test has 2 points, total is 30 points.
-On TA's tests, each test has 4 points, total is 60 points.
-The sum of this homework marks is 90.
+is a query "is X matchable to 1 _and_ is Y matchable to X?" that a _conjunction_ of two goals "X=1" and "Y = X". The goal succeeded.
 
-#### Deadline
 
-Fri Oct 6 2017 23:59:59
+```prolog
+?- X=1, X=2.
+false.
+```
 
-#### Note
+is a query with a _negative_ answer because the conjunction of goals  _failed_ or is _unsatisfiable_.
 
- * Clean all HW1 related files (Media.h, Shapes.h, Sort.h...and its implementation).
- * ~~The header's first letter should be capitalized so that we can caugth your header file on CI.~~
- * If you had any suggestions in HW1, improve it.
+```prolog
+?- X=1; X=2.
+X = 1 ;
+X = 2.
+```
+
+is a query with a _positive_ answer because the disjunctions succeeded in succession. Note that the ";" after "X=1" is typed by the user to query for more answers; the query terminates if the return key is hit.
+
+### Data objects in Prolog
