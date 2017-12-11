@@ -10,23 +10,12 @@ using std::string;
 class Atom : public Term {
 
     public:
-        Atom() {}
+        Atom();
+        Atom(string str);
 
-        Atom(string str) {
-            _symbol = str;
-        }
-
-        string symbol() const {
-            return _symbol;
-        }
-
-        bool match(Term &term) {
-            return value() == term.value();
-        }
-
-        bool match(Variable &variable) {
-            return variable.match(*this);
-        }
+        string symbol() const;
+        bool match(Term &term);
+        bool match(Variable &variable);
 
     private:
         string _symbol;

@@ -6,93 +6,28 @@
 
 using std::vector;
 
+
+template <class T>
+class Iterator;
+
 class List : public Term
 {
     public:
-        List(): _elements() {}
-        List(vector<Term *> const &elements): _elements(elements) {}
+        List();
+        List(vector<Term *> const &elements);
 
-        string symbol() const {
-            string symbol = "";
+        string symbol() const;
+        string value() const;
+        Term * head() const;
+        List * tail() const;
 
-            symbol += "[";
-            for (int i = 0; i < _elements.size(); i++) {
-                string delimiter = ", ";
-                if (i == _elements.size() - 1) {
-                    delimiter = "";
-                }
+        int size();
+        bool match(Term & term);
+        Term & get(int i);
 
-                symbol += _elements[i]->symbol() + delimiter;
-            }
-            symbol += "]";
-
-            return symbol;
-        }
-
-        string value() const {
-            string value = "";
-
-            value += "[";
-            for (int i = 0; i < _elements.size(); i++) {
-                string delimiter = ", ";
-                if (i == _elements.size() - 1) {
-                    delimiter = "";
-                }
-
-                value += _elements[i]->value() + delimiter;
-            }
-            value += "]";
-
-            return value;
-        }
-
-        bool match(Term & term) {
-            List* list = dynamic_cast<List *> (&term);
-            Variable* variable = dynamic_cast<Variable *> (&term);
-
-            if (list) {
-                if (_elements.size() == list->size())  {
-
-                    for (int i = 0; i < _elements.size(); i++) {
-                        if(! _elements[i]->match( list->get(i) )) return false;
-                    }
-
-                    return true;
-                }
-            }
-
-            if (variable) {
-                return variable->match(*this);
-            }
-
-            return false;
-        }
-
-        Term * head() const {
-            if (! _elements.empty()) {
-                return _elements[0];
-            } else {
-                throw string("Accessing head in an empty list");
-            }
-        }
-
-        List * tail() const {
-            if (! _elements.empty()) {
-                vector<Term *> newElements(_elements.begin()+ 1, _elements.end());
-
-                return new List(newElements);
-            } else {
-                throw string("Accessing tail in an empty list");
-            }
-        }
-
-        int size() {
-            return _elements.size();
-        }
-
-        Term & get(int i) {
-            return *_elements[i];
-        }
+        Iterator<Term *> *createIterator();
+        Iterator<Term *> *createDFSIterator();
+        Iterator<Term *> *createBFSIterator();
 
     private:
         vector<Term *> _elements;

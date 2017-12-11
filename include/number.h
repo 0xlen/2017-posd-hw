@@ -10,24 +10,15 @@ using std::string;
 
 class Number : public Term {
     public:
-        Number (double number) {
-            std::stringstream val;
-            val << number;
+        Number (double number);
 
-            _symbol = val.str();
-        }
+        string symbol() const;
+        bool match(Term &term);
+        bool match(Variable &variable);
 
-        string symbol() const {
-            return _symbol;
-        }
-
-        bool match(Term &term) {
-            return value() == term.value();
-        }
-
-        bool match(Variable &variable) {
-            return variable.match(*this);
-        }
+        Iterator<Term *> *createIterator();
+        Iterator<Term *> *createDFSIterator();
+        Iterator<Term *> *createBFSIterator();
 
     private:
         string _symbol;

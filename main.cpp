@@ -3,6 +3,7 @@
 #include "include/utVariable.h"
 #include "include/utList.h"
 #include "include/utParser.h"
+#include "include/utIterator.h"
 
 int main( int argc , char **argv )
 {
