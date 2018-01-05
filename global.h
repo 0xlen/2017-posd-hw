@@ -2,12 +2,11 @@
 #define GLOBAL_H
 
 #include <algorithm>
-#include <string>
-#include <vector>
 
-using std::string;
 using std::pair;
-using std::vector;
+
+#include <string>
+using std::string;
 
 const int NONE = -1; // no tokenValue
 
@@ -17,7 +16,9 @@ const int NUMBER = 256;
 const int ATOM = 257;
 const int ATOMSC = 258;
 const int VAR = 259;
-const int LIST = 260;
+
+#include <vector>
+using std::vector;
 
 vector<pair<string, int>> symtable;
 

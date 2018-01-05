@@ -1,21 +1,14 @@
-#include "include/atom.h"
+#include "atom.h"
+#include "variable.h"
+#include "iterator.h"
+//#include <typeinfo>
 
-
-Atom::Atom() {
+Iterator * Term::createIterator(){
+  return new NullIterator(this);
 }
 
-Atom::Atom(string str) {
-    _symbol = str;
-}
-
-string Atom::symbol() const {
-    return _symbol;
-}
-
-bool Atom::match(Term &term) {
-    return value() == term.value();
-}
-
-bool Atom::match(Variable &variable) {
-    return variable.match(*this);
+bool Term::match(Term & a){
+  if (a.getVariable() !=  nullptr)
+    return a.match(*this);
+  return symbol() == a.symbol();
 }

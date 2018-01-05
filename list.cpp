@@ -1,108 +1,50 @@
-#include "include/list.h"
-#include "include/variable.h"
-#include "include/iterator.h"
+#include "atom.h"
+#include "variable.h"
+#include <typeinfo>
+#include <iostream>
+#include <string>
+#include "list.h"
+#include "iterator.h"
+using std::vector;
 
-List::List() {
-}
-
-List::List(vector<Term *> const &elements) {
-    _elements = elements;
-}
-
-string List::symbol() const {
-    string symbol = "";
-
-    symbol += "[";
-    for (int i = 0; i < _elements.size(); i++) {
-        string delimiter = ", ";
-        if (i == _elements.size() - 1) {
-            delimiter = "";
-        }
-
-        symbol += _elements[i]->symbol() + delimiter;
-    }
-    symbol += "]";
-
-    return symbol;
-}
-
-string List::value() const {
-    string value = "";
-
-    value += "[";
-    for (int i = 0; i < _elements.size(); i++) {
-        string delimiter = ", ";
-        if (i == _elements.size() - 1) {
-            delimiter = "";
-        }
-
-        value += _elements[i]->value() + delimiter;
-    }
-    value += "]";
-
-    return value;
-}
-
-bool List::match(Term & term) {
-    List* list = dynamic_cast<List *> (&term);
-    Variable* variable = dynamic_cast<Variable *> (&term);
-
-    if (list) {
-        if (_elements.size() == list->size())  {
-
-            for (int i = 0; i < _elements.size(); i++) {
-                if(! _elements[i]->match( list->get(i) )) return false;
-            }
-
-            return true;
-        }
-    }
-
-    if (variable) {
-        return variable->match(*this);
-    }
-
-    return false;
-}
-
-Term * List::head() const {
-    if (! _elements.empty()) {
-        return _elements[0];
-    } else {
-        throw string("Accessing head in an empty list");
-    }
-}
-
-List * List::tail() const {
-    if (! _elements.empty()) {
-        vector<Term *> newElements(_elements.begin()+ 1, _elements.end());
-
-        return new List(newElements);
-    } else {
-        throw string("Accessing tail in an empty list");
-    }
-}
-
-int List::size() {
-    return _elements.size();
-}
-
-Term & List::get(int i) {
-    return *_elements[i];
-}
-
-Iterator<Term *> *List::createIterator()
+Iterator * List::createIterator()
 {
-    return new ListIterator<Term *>(this);
+  return new ListIterator(this);
 }
 
-Iterator<Term *> *List::createDFSIterator()
-{
-    return new DFSIterator<Term *>(this);
+string List::symbol() const{
+    string ret = "[";
+
+    for (const List* current = this; current != nullptr; current = dynamic_cast<List*> (current->tail()))
+    {
+      ret += ((current != this ) ? ", " : "");
+      ret += current->head()->symbol();
+    }
+
+    return ret + "]";
+  }
+
+string List::value() const{
+  string ret = "[";
+
+  for (const List* current = this; current != nullptr; current = dynamic_cast<List*> (current->tail()))
+  {
+    ret += ((current != this ) ? ", " : "");
+    ret += current->head()->value();
+  }
+
+  return ret + "]";
 }
 
-Iterator<Term *> *List::createBFSIterator()
-{
-    return new BFSIterator<Term *>(this);
+Term * List::head() const{
+    if(_args.empty())
+        throw std::string("Accessing head in an empty list");
+
+    return _args[0];
 }
 
+Term * List::tail() const {
+    if(_args.empty())
+        throw std::string("Accessing tail in an empty list");
+    return _args[1];
+}
